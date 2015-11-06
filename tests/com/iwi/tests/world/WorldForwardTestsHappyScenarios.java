@@ -20,8 +20,9 @@ public class WorldForwardTestsHappyScenarios {
 
 	@Parameters
 	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] { { 2, 1, 0, 1, 1, false }, { 2, 1, 1, 2, 2, false },
-				{ 2, 1, 2, 3, 1, false }, { 2, 1, 3, 2, 0, false } });
+		return Arrays.asList(new Object[][] { { 3, 3, 0, 2, 3, false },
+				{ 2, 1, 1, 2, 2, false }, { 2, 1, 2, 3, 1, false },
+				{ 2, 1, 3, 2, 0, false }, { 2, 2, 0, 1, 2, false } });
 	}
 
 	private int inputDirrection;
@@ -33,10 +34,11 @@ public class WorldForwardTestsHappyScenarios {
 
 	private boolean bump;
 
-	private int map[][] = { { 0, 0, 0, 1 }, { 2, 3, 1, 0 }, { 0, 0, 0, 0 }, { 0, 0, 1, 0 } };
+	private int map[][] = { { 0, 0, 0, 1 }, { 2, 3, 1, 0 }, { 0, 0, 0, 0 },
+			{ 0, 0, 1, 0 } };
 
-	public WorldForwardTestsHappyScenarios(int startingY, int startingX, int input, int expectedY, int expectedX,
-			boolean bump) {
+	public WorldForwardTestsHappyScenarios(int startingY, int startingX,
+			int input, int expectedY, int expectedX, boolean bump) {
 
 		inputDirrection = input;
 		this.expectedX = expectedX;

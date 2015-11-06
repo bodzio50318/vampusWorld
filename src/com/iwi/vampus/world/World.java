@@ -1,5 +1,7 @@
 package com.iwi.vampus.world;
 
+import java.util.Arrays;
+
 import com.iwi.vampus.Constants;
 
 public class World implements Accuators {
@@ -14,7 +16,8 @@ public class World implements Accuators {
 
 	public World(int map[][], Senses senses) {
 		this.map = map;
-		this.currentSenses = senses;
+		this.currentSenses = updateSenses(senses);
+	
 
 	}
 
@@ -104,6 +107,59 @@ public class World implements Accuators {
 	private Senses updateSenses(Senses newSenses) {
 
 		newSenses = detectSmell(newSenses);
+		newSenses = detectWind(newSenses);
+		
+		int x = newSenses.getX();
+		int y = newSenses.getY();
+		
+		if(map[y][x]==Constants.GOLD){
+			newSenses.setGlitter(true);
+		}
+		
+		return newSenses;
+	}
+
+	private Senses detectWind(Senses newSenses) {
+		int x = newSenses.getX();
+		int y = newSenses.getY();
+
+		int nx, ny;
+
+		nx = x - 1;
+		ny = y;
+
+		if (nx >= 0) {
+			if (map[ny][nx] == Constants.PIT) {
+				newSenses.setBreezy(true);
+			}
+		}
+
+		nx = x + 1;
+		ny = y;
+
+		if (nx <= 3) {
+			if (map[ny][nx] == Constants.PIT) {
+				newSenses.setBreezy(true);
+			}
+		}
+
+		nx = x;
+		ny = y - 1;
+
+		if (ny >= 0) {
+			if (map[ny][nx] == Constants.PIT) {
+				newSenses.setBreezy(true);
+			}
+		}
+
+		nx = x;
+		ny = y + 1;
+
+		if (ny <= 3) {
+			if (map[ny][nx] == Constants.PIT) {
+				newSenses.setBreezy(true);
+			}
+		}
 
 		return newSenses;
 	}
@@ -158,6 +214,40 @@ public class World implements Accuators {
 	public World grab() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public String toString() {
+
+		String out = "";
+		for (int j = 0; j < Constants.DIM; j++) {
+			for (int i = 0; i < Constants.DIM; i++) {
+				if (j == currentSenses.getY() && i == currentSenses.getX()) {
+					out = out + map[j][i] + "*| ";
+				} else {
+					out = out + map[j][i] + " | ";
+				}
+
+			}
+			out += "\n";
+		}
+		switch (currentSenses.getDirection()) {
+		case Constants.NORTH:
+			out += "^ " + currentSenses.toString();
+			break;
+		case Constants.EAST:
+			out += "> " + currentSenses.toString();
+			break;
+		case Constants.SOUTH:
+			out += "\\/ " + currentSenses.toString();
+			break;
+		case Constants.WEST:
+			out += "< " + currentSenses.toString();
+			break;
+
+		}
+
+		return out;
 	}
 
 }

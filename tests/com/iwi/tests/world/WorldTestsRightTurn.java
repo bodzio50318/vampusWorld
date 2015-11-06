@@ -17,6 +17,8 @@ import com.iwi.vampus.world.World;
 
 @RunWith(Parameterized.class)
 public class WorldTestsRightTurn extends TestCase {
+	private int map[][] = { { 0, 0, 0, 1 }, { 2, 3, 1, 0 }, { 0, 0, 0, 0 },
+			{ 0, 0, 1, 0 } };
 
 	@Parameters
 	public static Collection<Object[]> data() {
@@ -38,7 +40,7 @@ public class WorldTestsRightTurn extends TestCase {
 		Senses s = new Senses();
 		s.setDirection(inputDirrection);
 
-		World w = new World(null, s);
+		World w = new World(map, s);
 		World newW = w.turnRight();
 		assertEquals(expectedDirrection, newW.getCurrentSenses().getDirection());
 	}

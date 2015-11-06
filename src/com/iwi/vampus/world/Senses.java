@@ -75,4 +75,10 @@ public class Senses {
 		this.scream = scream;
 	}
 
+	@Override
+	public String toString() {
+		return "Senses [smelly=" + smelly + ", breezy=" + breezy + ", glitter="
+				+ glitter + ", bump=" + bump + ", scream=" + scream + "]";
+	}
+
 }

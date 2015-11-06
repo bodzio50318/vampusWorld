@@ -20,9 +20,12 @@ public class WorldForwardTestsUnhappy {
 
 	@Parameters
 	public static Collection<Object[]> data() {
-		return Arrays.asList(new Object[][] { { 3, 0, 0, 2, 0, false }, { 3, 0, 1, 3, 1, false },
-				{ 3, 0, 2, 3, 0, true }, { 3, 0, 3, 3, 0, true }, { 0, 0, 0, 0, 0, true }, { 0, 3, 0, 0, 3, true },
-				{ 0, 3, 1, 0, 3, true }, { 3, 3, 1, 3, 3, true }, { 3, 3, 2, 3, 3, true }, { 3, 3, 3, 3, 2, false } });
+		return Arrays.asList(new Object[][] { { 3, 0, 0, 2, 0, false },
+				{ 3, 0, 1, 3, 1, false }, { 3, 0, 2, 3, 0, true },
+				{ 3, 0, 3, 3, 0, true }, { 0, 0, 0, 0, 0, true },
+				{ 0, 3, 0, 0, 3, true }, { 0, 3, 1, 0, 3, true },
+				{ 3, 3, 1, 3, 3, true }, { 3, 3, 2, 3, 3, true },
+				{ 3, 3, 3, 3, 2, false } });
 	}
 
 	private int inputDirrection;
@@ -32,10 +35,11 @@ public class WorldForwardTestsUnhappy {
 	private int startingX;
 	private int startingY;
 	private boolean bump;
-	private int map[][] = { { 0, 0, 0, 1 }, { 2, 3, 1, 0 }, { 0, 0, 0, 0 }, { 0, 0, 1, 0 } };
+	private int map[][] = { { 0, 0, 0, 1 }, { 2, 3, 1, 0 }, { 0, 0, 0, 0 },
+			{ 0, 0, 1, 0 } };
 
-	public WorldForwardTestsUnhappy(int startingY, int startingX, int input, int expectedY, int expectedX,
-			boolean bump) {
+	public WorldForwardTestsUnhappy(int startingY, int startingX, int input,
+			int expectedY, int expectedX, boolean bump) {
 
 		inputDirrection = input;
 		this.expectedX = expectedX;
