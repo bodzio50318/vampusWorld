@@ -1,5 +1,7 @@
 package com.iwi.vampus.world;
 
+import com.iwi.vampus.Constants;
+
 public class World implements Accuators {
 
 	private int map[][];
@@ -23,19 +25,133 @@ public class World implements Accuators {
 		direction %= 4;
 		currentSenses.setDirection(direction);
 
-		return new World(map, currentSenses);
+		return new World(map, updateSenses(currentSenses));
 	}
 
 	@Override
 	public World turnLeft() {
-		// TODO Auto-generated method stub
-		return null;
+		int direction = currentSenses.getDirection();
+		direction--;
+		if (direction == -1) {
+			direction = 3;
+		}
+
+		currentSenses.setDirection(direction);
+
+		return new World(map, updateSenses(currentSenses));
 	}
 
 	@Override
 	public World forward() {
-		// TODO Auto-generated method stub
-		return null;
+		Senses newSenses = new Senses();
+
+		int direction = currentSenses.getDirection();
+		switch (direction) {
+		case Constants.NORTH:
+			newSenses.setX(currentSenses.getX());
+			newSenses.setY(currentSenses.getY() - 1);
+			newSenses.setDirection(direction);
+			break;
+		case Constants.EAST:
+			newSenses.setX(currentSenses.getX() + 1);
+			newSenses.setY(currentSenses.getY());
+			newSenses.setDirection(direction);
+			break;
+		case Constants.SOUTH:
+			newSenses.setX(currentSenses.getX());
+			newSenses.setY(currentSenses.getY() + 1);
+			newSenses.setDirection(direction);
+			break;
+		case Constants.WEST:
+			newSenses.setX(currentSenses.getX() - 1);
+			newSenses.setY(currentSenses.getY());
+			newSenses.setDirection(direction);
+			break;
+		}
+
+		newSenses = detectBump(newSenses);
+		return new World(map, updateSenses(newSenses));
+	}
+
+	private Senses detectBump(Senses newSenses) {
+		if (newSenses.getX() < 0) {
+			newSenses.setX(0);
+			newSenses.setBump(true);
+
+		}
+
+		if (newSenses.getX() > 3) {
+			newSenses.setX(3);
+			newSenses.setBump(true);
+
+		}
+
+		if (newSenses.getY() < 0) {
+			newSenses.setY(0);
+			newSenses.setBump(true);
+
+		}
+
+		if (newSenses.getY() > 3) {
+			newSenses.setY(3);
+			newSenses.setBump(true);
+
+		}
+
+		return newSenses;
+	}
+
+	private Senses updateSenses(Senses newSenses) {
+
+		newSenses = detectSmell(newSenses);
+
+		return newSenses;
+	}
+
+	private Senses detectSmell(Senses newSenses) {
+
+		int x = newSenses.getX();
+		int y = newSenses.getY();
+
+		int nx, ny;
+
+		nx = x - 1;
+		ny = y;
+
+		if (nx >= 0) {
+			if (map[ny][nx] == Constants.VAMPUS) {
+				newSenses.setSmelly(true);
+			}
+		}
+
+		nx = x + 1;
+		ny = y;
+
+		if (nx <= 3) {
+			if (map[ny][nx] == Constants.VAMPUS) {
+				newSenses.setSmelly(true);
+			}
+		}
+
+		nx = x;
+		ny = y - 1;
+
+		if (ny >= 0) {
+			if (map[ny][nx] == Constants.VAMPUS) {
+				newSenses.setSmelly(true);
+			}
+		}
+
+		nx = x;
+		ny = y + 1;
+
+		if (ny <= 3) {
+			if (map[ny][nx] == Constants.VAMPUS) {
+				newSenses.setSmelly(true);
+			}
+		}
+
+		return newSenses;
 	}
 
 	@Override

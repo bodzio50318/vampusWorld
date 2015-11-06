@@ -1,4 +1,4 @@
-package com.iwi.tests;
+package com.iwi.tests.world;
 
 import static org.junit.Assert.*;
 
