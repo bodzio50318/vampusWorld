@@ -4,6 +4,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+import com.iwi.tests.world.BumpAndForward;
 import com.iwi.tests.world.DeathPointsTest;
 import com.iwi.tests.world.GoldReturnTest;
 import com.iwi.tests.world.MovePointsTest;
@@ -18,7 +19,7 @@ import com.iwi.tests.world.WorldTurnLeftTests;
 @SuiteClasses({ WorldForwardTestsHappyScenarios.class,
 		WorldTestsRightTurn.class, WorldTurnLeftTests.class,
 		WorldForwardTestsUnhappy.class, WorldGlitterTests.class,
-		SensesTests.class, MovePointsTest.class, DeathPointsTest.class,GoldReturnTest.class })
+		SensesTests.class, MovePointsTest.class, DeathPointsTest.class,GoldReturnTest.class,BumpAndForward.class })
 public class WorldTests {
 
 }

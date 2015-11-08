@@ -75,7 +75,6 @@ public class World implements Accuators {
 			break;
 		}
 
-		detectBump();
 		updateSenses();
 		return new World(map, currentSenses);
 	}
@@ -84,31 +83,32 @@ public class World implements Accuators {
 		if (currentSenses.getX() < 0) {
 			currentSenses.setX(0);
 			currentSenses.setBump(true);
+			return;
 
 		}
 
 		if (currentSenses.getX() > 3) {
 			currentSenses.setX(3);
 			currentSenses.setBump(true);
-
+			return;
 		}
 
 		if (currentSenses.getY() < 0) {
 			currentSenses.setY(0);
 			currentSenses.setBump(true);
-
+			return;
 		}
 
 		if (currentSenses.getY() > 3) {
 			currentSenses.setY(3);
 			currentSenses.setBump(true);
-
+			return;
 		}
-
+		currentSenses.setBump(false);
 	}
 
 	private Senses updateSenses() {
-
+		detectBump();
 		passiveSensesUpdate();
 
 		currentSenses.setPoints(currentSenses.getPoints()
@@ -247,8 +247,8 @@ public class World implements Accuators {
 	public World grab() {
 		int x = currentSenses.getX();
 		int y = currentSenses.getY();
-		
-		if (map[y][x] == Constants.GOLD){
+
+		if (map[y][x] == Constants.GOLD) {
 			currentSenses.setHasGold(true);
 			map[y][x] = Constants.FREE;
 		}
