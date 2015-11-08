@@ -79,6 +79,47 @@ public class World implements Accuators {
 		return new World(map, currentSenses);
 	}
 
+	@Override
+	public World shoot() {
+		int direction = currentSenses.getDirection();
+		int x = currentSenses.getX();
+		int y = currentSenses.getY();
+
+		switch (direction) {
+		case Constants.NORTH:
+			for (int i = y - 1; i >= 0; i--) {
+				if (map[x][i] == Constants.VAMPUS) {
+					currentSenses.setScream(true);
+				}
+			}
+			break;
+		case Constants.EAST:
+
+			break;
+		case Constants.SOUTH:
+			break;
+		case Constants.WEST:
+			break;
+		}
+
+		updateSenses();
+		return new World(map, currentSenses);
+	}
+
+	@Override
+	public World grab() {
+		int x = currentSenses.getX();
+		int y = currentSenses.getY();
+
+		if (map[y][x] == Constants.GOLD) {
+			currentSenses.setHasGold(true);
+			map[y][x] = Constants.FREE;
+		}
+
+		updateSenses();
+		return new World(map, currentSenses);
+	}
+
 	private void detectBump() {
 		if (currentSenses.getX() < 0) {
 			currentSenses.setX(0);
@@ -120,8 +161,8 @@ public class World implements Accuators {
 	}
 
 	private void passiveSensesUpdate() {
-		currentSenses = detectSmell(currentSenses);
-		currentSenses = detectWind(currentSenses);
+		detectSmell();
+		detectWind();
 
 		int x = currentSenses.getX();
 		int y = currentSenses.getY();
@@ -152,7 +193,7 @@ public class World implements Accuators {
 
 	}
 
-	private Senses detectWind(Senses currentSenses) {
+	private void detectWind() {
 		int x = currentSenses.getX();
 		int y = currentSenses.getY();
 
@@ -194,10 +235,9 @@ public class World implements Accuators {
 			}
 		}
 
-		return currentSenses;
 	}
 
-	private Senses detectSmell(Senses currentSenses) {
+	private void detectSmell() {
 
 		int x = currentSenses.getX();
 		int y = currentSenses.getY();
@@ -240,21 +280,6 @@ public class World implements Accuators {
 			}
 		}
 
-		return currentSenses;
-	}
-
-	@Override
-	public World grab() {
-		int x = currentSenses.getX();
-		int y = currentSenses.getY();
-
-		if (map[y][x] == Constants.GOLD) {
-			currentSenses.setHasGold(true);
-			map[y][x] = Constants.FREE;
-		}
-
-		updateSenses();
-		return new World(map, currentSenses);
 	}
 
 	@Override

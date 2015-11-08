@@ -10,4 +10,6 @@ public interface Accuators {
 
 	public World grab();
 
+	public World shoot();
+
 }
