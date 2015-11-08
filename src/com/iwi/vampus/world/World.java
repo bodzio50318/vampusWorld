@@ -16,8 +16,7 @@ public class World implements Accuators {
 
 	public World(int map[][], Senses senses) {
 		this.map = map;
-		this.currentSenses = updateSenses(senses);
-	
+		this.currentSenses = senses;
 
 	}
 
@@ -29,6 +28,10 @@ public class World implements Accuators {
 		currentSenses.setDirection(direction);
 
 		return new World(map, updateSenses(currentSenses));
+	}
+
+	public void startUp() {
+		currentSenses = passiveSensesUpdate(currentSenses);
 	}
 
 	@Override
@@ -46,7 +49,7 @@ public class World implements Accuators {
 
 	@Override
 	public World forward() {
-		Senses newSenses = new Senses();
+		Senses newSenses = currentSenses;
 
 		int direction = currentSenses.getDirection();
 		switch (direction) {
@@ -71,7 +74,6 @@ public class World implements Accuators {
 			newSenses.setDirection(direction);
 			break;
 		}
-
 		newSenses = detectBump(newSenses);
 		return new World(map, updateSenses(newSenses));
 	}
@@ -106,16 +108,42 @@ public class World implements Accuators {
 
 	private Senses updateSenses(Senses newSenses) {
 
+		newSenses = passiveSensesUpdate(newSenses);
+
+		newSenses.setPoints(newSenses.getPoints() - Constants.ACTION_COST);
+
+		newSenses = checkIfEndOfGame(newSenses);
+
+		return newSenses;
+	}
+
+	private Senses passiveSensesUpdate(Senses newSenses) {
 		newSenses = detectSmell(newSenses);
 		newSenses = detectWind(newSenses);
-		
+
 		int x = newSenses.getX();
 		int y = newSenses.getY();
-		
-		if(map[y][x]==Constants.GOLD){
+
+		if (map[y][x] == Constants.GOLD) {
 			newSenses.setGlitter(true);
+		} else {
+			newSenses.setGlitter(false);
 		}
-		
+		return newSenses;
+	}
+
+	private Senses checkIfEndOfGame(Senses newSenses) {
+		int x = newSenses.getX();
+		int y = newSenses.getY();
+
+		if (map[y][x] == Constants.VAMPUS || map[y][x] == Constants.PIT) {
+			newSenses.setPoints(newSenses.getPoints() - Constants.DEATH_COST);
+			newSenses.setAlive(false);
+		}
+		if (y==Constants.START_Y  && x==Constants.START_X && newSenses.hasGold() ){
+			newSenses.setPoints(newSenses.getPoints() - Constants.GOLD_RETURN_COST);
+			newSenses.setAlive(false);
+		}
 		return newSenses;
 	}
 
@@ -213,7 +241,7 @@ public class World implements Accuators {
 	@Override
 	public World grab() {
 		// TODO Auto-generated method stub
-		return null;
+		return new World(map, updateSenses(currentSenses));
 	}
 
 	@Override

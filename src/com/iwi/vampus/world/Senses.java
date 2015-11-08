@@ -1,15 +1,51 @@
 package com.iwi.vampus.world;
 
 public class Senses {
-	private boolean smelly;
-	private boolean breezy;
-	private boolean glitter;
-	private boolean bump;
-	private boolean scream;
+	private boolean smelly = false;
+	private boolean breezy = false;
+	private boolean glitter = false;
+	private boolean bump = false;
+	private boolean scream = false;
 
-	private int direction;
+	private boolean alive = true;
+	private boolean hasGold = false;
+	private boolean hasArrow = true;
+	private int points = 0;
+	private int direction = 0;
 	private int x;
 	private int y;
+
+	public boolean hasGold() {
+		return hasGold;
+	}
+
+	public void setHasGold(boolean hasGold) {
+		this.hasGold = hasGold;
+	}
+
+	public boolean hasArrow() {
+		return hasArrow;
+	}
+
+	public void setHasArrow(boolean hasArrow) {
+		this.hasArrow = hasArrow;
+	}
+
+	public boolean isAlive() {
+		return alive;
+	}
+
+	public void setAlive(boolean alive) {
+		this.alive = alive;
+	}
+
+	public int getPoints() {
+		return points;
+	}
+
+	public void setPoints(int points) {
+		this.points = points;
+	}
 
 	public int getX() {
 		return x;
@@ -78,7 +114,9 @@ public class Senses {
 	@Override
 	public String toString() {
 		return "Senses [smelly=" + smelly + ", breezy=" + breezy + ", glitter="
-				+ glitter + ", bump=" + bump + ", scream=" + scream + "]";
+				+ glitter + ", bump=" + bump + ", scream=" + scream
+				+ ", alive=" + alive + ", hasGold=" + hasGold + ", hasArrow="
+				+ hasArrow + ", points=" + points + "]";
 	}
 
 }
