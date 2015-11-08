@@ -27,11 +27,12 @@ public class World implements Accuators {
 		direction %= 4;
 		currentSenses.setDirection(direction);
 
-		return new World(map, updateSenses(currentSenses));
+		updateSenses();
+		return new World(map, currentSenses);
 	}
 
 	public void startUp() {
-		currentSenses = passiveSensesUpdate(currentSenses);
+		passiveSensesUpdate();
 	}
 
 	@Override
@@ -43,113 +44,117 @@ public class World implements Accuators {
 		}
 
 		currentSenses.setDirection(direction);
-
-		return new World(map, updateSenses(currentSenses));
+		updateSenses();
+		return new World(map, currentSenses);
 	}
 
 	@Override
 	public World forward() {
-		Senses newSenses = currentSenses;
 
 		int direction = currentSenses.getDirection();
 		switch (direction) {
 		case Constants.NORTH:
-			newSenses.setX(currentSenses.getX());
-			newSenses.setY(currentSenses.getY() - 1);
-			newSenses.setDirection(direction);
+			currentSenses.setX(currentSenses.getX());
+			currentSenses.setY(currentSenses.getY() - 1);
+			currentSenses.setDirection(direction);
 			break;
 		case Constants.EAST:
-			newSenses.setX(currentSenses.getX() + 1);
-			newSenses.setY(currentSenses.getY());
-			newSenses.setDirection(direction);
+			currentSenses.setX(currentSenses.getX() + 1);
+			currentSenses.setY(currentSenses.getY());
+			currentSenses.setDirection(direction);
 			break;
 		case Constants.SOUTH:
-			newSenses.setX(currentSenses.getX());
-			newSenses.setY(currentSenses.getY() + 1);
-			newSenses.setDirection(direction);
+			currentSenses.setX(currentSenses.getX());
+			currentSenses.setY(currentSenses.getY() + 1);
+			currentSenses.setDirection(direction);
 			break;
 		case Constants.WEST:
-			newSenses.setX(currentSenses.getX() - 1);
-			newSenses.setY(currentSenses.getY());
-			newSenses.setDirection(direction);
+			currentSenses.setX(currentSenses.getX() - 1);
+			currentSenses.setY(currentSenses.getY());
+			currentSenses.setDirection(direction);
 			break;
 		}
-		newSenses = detectBump(newSenses);
-		return new World(map, updateSenses(newSenses));
+
+		detectBump();
+		updateSenses();
+		return new World(map, currentSenses);
 	}
 
-	private Senses detectBump(Senses newSenses) {
-		if (newSenses.getX() < 0) {
-			newSenses.setX(0);
-			newSenses.setBump(true);
+	private void detectBump() {
+		if (currentSenses.getX() < 0) {
+			currentSenses.setX(0);
+			currentSenses.setBump(true);
 
 		}
 
-		if (newSenses.getX() > 3) {
-			newSenses.setX(3);
-			newSenses.setBump(true);
+		if (currentSenses.getX() > 3) {
+			currentSenses.setX(3);
+			currentSenses.setBump(true);
 
 		}
 
-		if (newSenses.getY() < 0) {
-			newSenses.setY(0);
-			newSenses.setBump(true);
+		if (currentSenses.getY() < 0) {
+			currentSenses.setY(0);
+			currentSenses.setBump(true);
 
 		}
 
-		if (newSenses.getY() > 3) {
-			newSenses.setY(3);
-			newSenses.setBump(true);
+		if (currentSenses.getY() > 3) {
+			currentSenses.setY(3);
+			currentSenses.setBump(true);
 
 		}
 
-		return newSenses;
 	}
 
-	private Senses updateSenses(Senses newSenses) {
+	private Senses updateSenses() {
 
-		newSenses = passiveSensesUpdate(newSenses);
+		passiveSensesUpdate();
 
-		newSenses.setPoints(newSenses.getPoints() - Constants.ACTION_COST);
+		currentSenses.setPoints(currentSenses.getPoints()
+				- Constants.ACTION_COST);
 
-		newSenses = checkIfEndOfGame(newSenses);
+		checkIfEndOfGame();
 
-		return newSenses;
+		return currentSenses;
 	}
 
-	private Senses passiveSensesUpdate(Senses newSenses) {
-		newSenses = detectSmell(newSenses);
-		newSenses = detectWind(newSenses);
+	private void passiveSensesUpdate() {
+		currentSenses = detectSmell(currentSenses);
+		currentSenses = detectWind(currentSenses);
 
-		int x = newSenses.getX();
-		int y = newSenses.getY();
+		int x = currentSenses.getX();
+		int y = currentSenses.getY();
 
 		if (map[y][x] == Constants.GOLD) {
-			newSenses.setGlitter(true);
+			currentSenses.setGlitter(true);
 		} else {
-			newSenses.setGlitter(false);
+			currentSenses.setGlitter(false);
 		}
-		return newSenses;
+
 	}
 
-	private Senses checkIfEndOfGame(Senses newSenses) {
-		int x = newSenses.getX();
-		int y = newSenses.getY();
+	private void checkIfEndOfGame() {
+		int x = currentSenses.getX();
+		int y = currentSenses.getY();
 
 		if (map[y][x] == Constants.VAMPUS || map[y][x] == Constants.PIT) {
-			newSenses.setPoints(newSenses.getPoints() - Constants.DEATH_COST);
-			newSenses.setAlive(false);
+			currentSenses.setPoints(currentSenses.getPoints()
+					- Constants.DEATH_COST);
+			currentSenses.setAlive(false);
 		}
-		if (y==Constants.START_Y  && x==Constants.START_X && newSenses.hasGold() ){
-			newSenses.setPoints(newSenses.getPoints() - Constants.GOLD_RETURN_COST);
-			newSenses.setAlive(false);
+		if (y == Constants.START_Y && x == Constants.START_X
+				&& currentSenses.hasGold()) {
+			currentSenses.setPoints(currentSenses.getPoints()
+					- Constants.GOLD_RETURN_COST);
+			currentSenses.setAlive(false);
 		}
-		return newSenses;
+		
 	}
 
-	private Senses detectWind(Senses newSenses) {
-		int x = newSenses.getX();
-		int y = newSenses.getY();
+	private Senses detectWind(Senses currentSenses) {
+		int x = currentSenses.getX();
+		int y = currentSenses.getY();
 
 		int nx, ny;
 
@@ -158,7 +163,7 @@ public class World implements Accuators {
 
 		if (nx >= 0) {
 			if (map[ny][nx] == Constants.PIT) {
-				newSenses.setBreezy(true);
+				currentSenses.setBreezy(true);
 			}
 		}
 
@@ -167,7 +172,7 @@ public class World implements Accuators {
 
 		if (nx <= 3) {
 			if (map[ny][nx] == Constants.PIT) {
-				newSenses.setBreezy(true);
+				currentSenses.setBreezy(true);
 			}
 		}
 
@@ -176,7 +181,7 @@ public class World implements Accuators {
 
 		if (ny >= 0) {
 			if (map[ny][nx] == Constants.PIT) {
-				newSenses.setBreezy(true);
+				currentSenses.setBreezy(true);
 			}
 		}
 
@@ -185,17 +190,17 @@ public class World implements Accuators {
 
 		if (ny <= 3) {
 			if (map[ny][nx] == Constants.PIT) {
-				newSenses.setBreezy(true);
+				currentSenses.setBreezy(true);
 			}
 		}
 
-		return newSenses;
+		return currentSenses;
 	}
 
-	private Senses detectSmell(Senses newSenses) {
+	private Senses detectSmell(Senses currentSenses) {
 
-		int x = newSenses.getX();
-		int y = newSenses.getY();
+		int x = currentSenses.getX();
+		int y = currentSenses.getY();
 
 		int nx, ny;
 
@@ -204,7 +209,7 @@ public class World implements Accuators {
 
 		if (nx >= 0) {
 			if (map[ny][nx] == Constants.VAMPUS) {
-				newSenses.setSmelly(true);
+				currentSenses.setSmelly(true);
 			}
 		}
 
@@ -213,7 +218,7 @@ public class World implements Accuators {
 
 		if (nx <= 3) {
 			if (map[ny][nx] == Constants.VAMPUS) {
-				newSenses.setSmelly(true);
+				currentSenses.setSmelly(true);
 			}
 		}
 
@@ -222,7 +227,7 @@ public class World implements Accuators {
 
 		if (ny >= 0) {
 			if (map[ny][nx] == Constants.VAMPUS) {
-				newSenses.setSmelly(true);
+				currentSenses.setSmelly(true);
 			}
 		}
 
@@ -231,17 +236,19 @@ public class World implements Accuators {
 
 		if (ny <= 3) {
 			if (map[ny][nx] == Constants.VAMPUS) {
-				newSenses.setSmelly(true);
+				currentSenses.setSmelly(true);
 			}
 		}
 
-		return newSenses;
+		return currentSenses;
 	}
 
 	@Override
 	public World grab() {
 		// TODO Auto-generated method stub
-		return new World(map, updateSenses(currentSenses));
+
+		updateSenses();
+		return new World(map, currentSenses);
 	}
 
 	@Override
