@@ -9,7 +9,7 @@ import com.iwi.vampus.world.Senses;
 import com.iwi.vampus.world.World;
 
 public class WorldGlitterTests {
-	
+
 	private int map[][] = { { 0, 0, 0, 1 }, { 2, 3, 1, 0 }, { 0, 0, 0, 0 },
 			{ 0, 0, 1, 0 } };
 	World w;
@@ -24,15 +24,25 @@ public class WorldGlitterTests {
 		w = new World(map, s);
 		w.startUp();
 	}
-	
+
 	@Test
 	public void happyTest() {
 		assertEquals(true, w.getCurrentSenses().isGlitter());
 	}
+
 	@Test
 	public void unHappyTest() {
-		w=w.forward();
+		w = w.forward();
 		assertEquals(false, w.getCurrentSenses().isGlitter());
 	}
+	@Test
+	public void happyGrabTest() {
+		assertEquals(false, w.getCurrentSenses().hasGold());
+		assertEquals(true, w.getCurrentSenses().isGlitter());
+		w.grab();
+		assertEquals(false, w.getCurrentSenses().isGlitter());
+		assertEquals(true, w.getCurrentSenses().hasGold());
+	}
+	
 
 }

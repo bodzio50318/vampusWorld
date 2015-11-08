@@ -149,7 +149,7 @@ public class World implements Accuators {
 					- Constants.GOLD_RETURN_COST);
 			currentSenses.setAlive(false);
 		}
-		
+
 	}
 
 	private Senses detectWind(Senses currentSenses) {
@@ -245,7 +245,13 @@ public class World implements Accuators {
 
 	@Override
 	public World grab() {
-		// TODO Auto-generated method stub
+		int x = currentSenses.getX();
+		int y = currentSenses.getY();
+		
+		if (map[y][x] == Constants.GOLD){
+			currentSenses.setHasGold(true);
+			map[y][x] = Constants.FREE;
+		}
 
 		updateSenses();
 		return new World(map, currentSenses);
