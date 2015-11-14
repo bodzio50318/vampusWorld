@@ -25,8 +25,8 @@ public class World implements Accuators {
 		int direction = currentSenses.getDirection();
 		direction++;
 		direction %= 4;
+		
 		currentSenses.setDirection(direction);
-
 		updateSenses();
 		return new World(map, currentSenses);
 	}
@@ -86,23 +86,42 @@ public class World implements Accuators {
 		int y = currentSenses.getY();
 
 		switch (direction) {
+	
 		case Constants.NORTH:
-			for (int i = y - 1; i >= 0; i--) {
-				if (map[x][i] == Constants.VAMPUS) {
+			for(int i=y-1; i>=0; i--){
+				if (map[i][x] == Constants.VAMPUS){
+					map[i][x] = Constants.FREE;
 					currentSenses.setScream(true);
-				}
+				}			
 			}
 			break;
 		case Constants.EAST:
-
+			for(int i=x+1; i<3; i++){
+				if (map[y][i] == Constants.VAMPUS){
+					map[y][i] = Constants.FREE;
+					currentSenses.setScream(true);
+				}			
+			}
 			break;
 		case Constants.SOUTH:
+			for(int i=y+1; i<3; i++){
+				if (map[i][x] == Constants.VAMPUS){
+					map[i][x] = Constants.FREE;
+					currentSenses.setScream(true);
+				}			
+			}
 			break;
 		case Constants.WEST:
+			for(int i=x-1; i>=0; i--){
+				if (map[y][i] == Constants.VAMPUS){
+					map[y][i] = Constants.FREE;
+					currentSenses.setScream(true);
+				}			
+			}
 			break;
 		}
 
-		updateSenses();
+		currentSenses.setHasArrow(false);
 		return new World(map, currentSenses);
 	}
 
